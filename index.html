@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazinbot - Soluciones de automatización</title>
+    <!-- Favicon -->
+    <link rel="icon" href="./images/logo_isotipo.ico" type="image/x-icon">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rojo: #ff3535;
+            --negro: #292F36;
+            --cyan: #4ECDC4;
+            --blanco: #FBFCFE;
+            --azul-galaxy: #2a4b7d;
+            --turquesa: #2C5364;
+            --verde-azulado: #2C5364;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--blanco);
+            color: var(--azul-galaxy);
+            line-height: 1.8;
+            padding-top: 80px;
+        }
+        
+        header {
+            background: var(--blanco);
+            padding: 1rem 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            height: 80px;
+            width: 100%;
+            display: flex;
+            z-index: 100;
+            transition: all 0.3s ease;
+            align-items: center;
+        }
+        
+        header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+            max-width: 300px;
+            object-fit: contain;
+        }
+        
+        .menu {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        
+        .menu a {
+            color: var(--azul-galaxy);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .menu a:hover {
+            color: var(--rojo);
+        }
+        
+        .menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--rojo);
+            transition: width 0.3s;
+        }
+        
+        .menu a:hover::after {
+            width: 100%;
+        }
+        
+        .language-switcher {
+            background: transparent;
+            border: 1px solid rgba(15, 32, 39, 0.2);
+            color: var(--azul-galaxy);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            min-width: 60px;
+            justify-content: center;
+        }
+        
+        .language-switcher:hover {
+            background: rgba(15, 32, 39, 0.05);
+            border-color: rgba(15, 32, 39, 0.4);
+        }
+        
+        .language-icon {
+            display: inline-block;
+            font-size: 1.1em;
+            transition: transform 0.3s ease;
+        }
+        
+        .language-switcher:hover .language-icon {
+            transform: rotate(180deg);
+        }
+        
+        #languageText {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        section {
+            padding: 3rem 0;
+            scroll-margin-top: 80px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--turquesa) 0%, #203A43 50%, #0F2027 100%);
+            color: var(--blanco);
+            padding: 7rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        h2 {
+            color: var(--rojo);
+            margin-bottom: 2.5rem;
+            font-size: 2.5rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            bottom: -10px;
+            left: 25%;
+            background: linear-gradient(90deg, var(--rojo) 0%, var(--azul-galaxy) 100%);
+        }
+        
+        .content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        }
+        
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--azul-galaxy);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .service-card h3 {
+            color: var(--azul-galaxy);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .service-card p {
+            color: var(--azul-galaxy);
+            line-height: 1.8;
+        }
+        
+        /* Sección de Contacto Actualizada */
+        .contact-info {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .contact-icons a {
+            font-size: 2.5rem;
+            color: var(--azul-galaxy);
+            transition: all 0.3s;
+        }
+        
+        .contact-icons a:hover {
+            color: var(--rojo);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--turquesa) 0%, #203A43 50%, #0F2027 100%);
+            color: var(--blanco);
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-content p:first-child {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .footer-content p:last-child {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            section {
+                padding: 3rem 0;
+            }
+            
+            .contact-icons {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .contact-icons a {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <img src="./images/logo-mazinbot.png" alt="Mazinbot Technologies">
+                </a>
+                <ul class="menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#politica-privacidad">Política</a></li>
+                    <li>
+                        <button class="language-switcher" id="languageButton" aria-label="Cambiar idioma">
+                            <span id="languageText">EN</span>
+                            <span class="language-icon" aria-hidden="true">🌐</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h1 id="heroTitle">Soluciones Avanzadas en Automatización</h1>
+            <p id="heroSubtitle">Chatbots inteligentes y automatización de procesos para transformar tu negocio</p>
+        </div>
+    </section>
+
+    <section id="nosotros">
+        <div class="container">
+            <h2 id="aboutTitle">Nosotros</h2>
+            <div class="content">
+                <p id="aboutText1">Somos MazinBot, un equipo de especialistas en desarrollo de soluciones tecnológicas para plataformas de mensajería y automatización de procesos.</p>
+                <p id="aboutText2">Nuestra misión es ayudar a las empresas a optimizar sus operaciones mediante chatbots inteligentes, RPA (Automatización Robótica de Procesos) y tecnologías de web scraping, ofreciendo soluciones personalizadas que mejoran la comunicación con los clientes y la eficiencia operacional.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <div class="container">
+            <h2 id="servicesTitle">Servicios</h2>
+            <div class="services">
+                <div class="service-card">
+                    <h3 id="service1Title">Chatbots para WhatsApp</h3>
+                    <p id="service1Text">Desarrollamos soluciones automatizadas para WhatsApp Business que mejoran la atención al cliente, generan leads cualificados y aumentan las ventas mediante interacciones inteligentes las 24 horas.</p>
+                </div>
+                <div class="service-card">
+                    <h3 id="service2Title">Soluciones para Instagram</h3>
+                    <p id="service2Text">Automatizamos respuestas, gestionamos interacciones y creamos experiencias conversacionales en Instagram Messenger que incrementan el engagement y convierten seguidores en clientes.</p>
+                </div>
+                <div class="service-card">
+                    <h3 id="service3Title">Integraciones con APIs</h3>
+                    <p id="service3Text">Conectamos tus sistemas CRM, ERP y otras plataformas empresariales con las principales plataformas de mensajería para un flujo de trabajo completamente integrado y sin fisuras.</p>
+                </div>
+                <div class="service-card">
+                    <h3 id="service4Title">Automatización RPA</h3>
+                    <p id="service4Text">Implementamos soluciones de Automatización Robótica de Procesos (RPA) que replican tareas humanas repetitivas, reduciendo errores y aumentando la productividad en áreas como procesamiento de datos, gestión de facturas y atención al cliente.</p>
+                </div>
+                <div class="service-card">
+                    <h3 id="service5Title">Web Scraping</h3>
+                    <p id="service5Text">Desarrollamos herramientas avanzadas de extracción de datos web que recopilan, organizan y analizan información de múltiples fuentes en internet, proporcionando insights valiosos para la toma de decisiones empresariales.</p>
+                </div>
+                <div class="service-card">
+                    <h3 id="service6Title">Soluciones Personalizadas</h3>
+                    <p id="service6Text">Creamos sistemas a medida que combinan chatbots, RPA y web scraping para ofrecer soluciones integrales que resuelven desafíos específicos de tu negocio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="politica-privacidad">
+        <div class="container">
+            <h2 id="privacyTitle">Política de Privacidad</h2>
+            <div class="content">
+                <h3 id="privacy1Title">Protección de Datos</h3>
+                <p id="privacy1Text">Nos comprometemos a proteger la privacidad de nuestros clientes y usuarios mediante protocolos de seguridad avanzados y cumplimiento con las normativas de protección de datos vigentes.</p>
+                
+                <h3 id="privacy2Title">Uso de la Información</h3>
+                <p id="privacy2Text">Los datos proporcionados se utilizan exclusivamente para prestar y mejorar nuestros servicios, garantizando siempre la confidencialidad y seguridad de la información.</p>
+                
+                <h3 id="privacy3Title">Cookies y Tecnologías Similares</h3>
+                <p id="privacy3Text">Este sitio web utiliza cookies técnicas necesarias para su funcionamiento y cookies analíticas para mejorar la experiencia del usuario, siempre con su consentimiento.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="container">
+            <h2>Contacto</h2>
+            <div class="contact-info">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--rojo); margin-bottom: 1rem;">¿Listo para automatizar tu negocio?</h3>
+                    <p>Contáctanos directamente a través de:</p>
+                </div>
+                
+                <div class="contact-icons">
+                    <a href="https://www.instagram.com/mazinbotech/" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/17548028705" target="_blank" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:contacto@mazinbot.com" aria-label="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://www.facebook.com/tupagina" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p id="footerCopyright">&copy; 2025 Mazinbot Technologies. Todos los derechos reservados.</p>
+                <p id="footerSlogan">Innovando en automatización y comunicación inteligente</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling para los enlaces del menú
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Language content
+        const translations = {
+            'es': {
+                'heroTitle': 'Soluciones Avanzadas en Automatización',
+                'heroSubtitle': 'Chatbots inteligentes y automatización de procesos para transformar tu negocio',
+                'aboutTitle': 'Nosotros',
+                'aboutText1': 'Somos MazinBot, un equipo de especialistas en desarrollo de soluciones tecnológicas para plataformas de mensajería y automatización de procesos.',
+                'aboutText2': 'Nuestra misión es ayudar a las empresas a optimizar sus operaciones mediante chatbots inteligentes, RPA (Automatización Robótica de Procesos) y tecnologías de web scraping, ofreciendo soluciones personalizadas que mejoran la comunicación con los clientes y la eficiencia operacional.',
+                'servicesTitle': 'Servicios',
+                'service1Title': 'Chatbots para WhatsApp',
+                'service1Text': 'Desarrollamos soluciones automatizadas para WhatsApp Business que mejoran la atención al cliente, generan leads cualificados y aumentan las ventas mediante interacciones inteligentes las 24 horas.',
+                'service2Title': 'Soluciones para Instagram',
+                'service2Text': 'Automatizamos respuestas, gestionamos interacciones y creamos experiencias conversacionales en Instagram Messenger que incrementan el engagement y convierten seguidores en clientes.',
+                'service3Title': 'Integraciones con APIs',
+                'service3Text': 'Conectamos tus sistemas CRM, ERP y otras plataformas empresariales con las principales plataformas de mensajería para un flujo de trabajo completamente integrado y sin fisuras.',
+                'service4Title': 'Automatización RPA',
+                'service4Text': 'Implementamos soluciones de Automatización Robótica de Procesos (RPA) que replican tareas humanas repetitivas, reduciendo errores y aumentando la productividad en áreas como procesamiento de datos, gestión de facturas y atención al cliente.',
+                'service5Title': 'Web Scraping',
+                'service5Text': 'Desarrollamos herramientas avanzadas de extracción de datos web que recopilan, organizan y analizan información de múltiples fuentes en internet, proporcionando insights valiosos para la toma de decisiones empresariales.',
+                'service6Title': 'Soluciones Personalizadas',
+                'service6Text': 'Creamos sistemas a medida que combinan chatbots, RPA y web scraping para ofrecer soluciones integrales que resuelven desafíos específicos de tu negocio.',
+                'privacyTitle': 'Política de Privacidad',
+                'privacy1Title': 'Protección de Datos',
+                'privacy1Text': 'Nos comprometemos a proteger la privacidad de nuestros clientes y usuarios mediante protocolos de seguridad avanzados y cumplimiento con las normativas de protección de datos vigentes.',
+                'privacy2Title': 'Uso de la Información',
+                'privacy2Text': 'Los datos proporcionados se utilizan exclusivamente para prestar y mejorar nuestros servicios, garantizando siempre la confidencialidad y seguridad de la información.',
+                'privacy3Title': 'Cookies y Tecnologías Similares',
+                'privacy3Text': 'Este sitio web utiliza cookies técnicas necesarias para su funcionamiento y cookies analíticas para mejorar la experiencia del usuario, siempre con su consentimiento.',
+                'footerCopyright': '© 2025 Mazinbot Technologies. Todos los derechos reservados.',
+                'footerSlogan': 'Innovando en automatización y comunicación inteligente',
+                'menuItems': ['Inicio', 'Servicios', 'Nosotros', 'Contacto', 'Política']
+            },
+            'en': {
+                'heroTitle': 'Advanced Automation Solutions',
+                'heroSubtitle': 'Smart chatbots and process automation to transform your business',
+                'aboutTitle': 'About Us',
+                'aboutText1': 'We are MazinBot, a team of specialists in developing technological solutions for messaging platforms and process automation.',
+                'aboutText2': 'Our mission is to help businesses optimize their operations through intelligent chatbots, RPA (Robotic Process Automation) and web scraping technologies, offering customized solutions that improve customer communication and operational efficiency.',
+                'servicesTitle': 'Services',
+                'service1Title': 'WhatsApp Chatbots',
+                'service1Text': 'We develop automated solutions for WhatsApp Business that improve customer service, generate qualified leads and increase sales through 24/7 intelligent interactions.',
+                'service2Title': 'Instagram Solutions',
+                'service2Text': 'We automate responses, manage interactions and create conversational experiences on Instagram Messenger that increase engagement and turn followers into customers.',
+                'service3Title': 'API Integrations',
+                'service3Text': 'We connect your CRM, ERP and other business systems with major messaging platforms for a completely integrated and seamless workflow.',
+                'service4Title': 'RPA Automation',
+                'service4Text': 'We implement Robotic Process Automation (RPA) solutions that replicate repetitive human tasks, reducing errors and increasing productivity in areas such as data processing, invoice management and customer service.',
+                'service5Title': 'Web Scraping',
+                'service5Text': 'We develop advanced web data extraction tools that collect, organize and analyze information from multiple online sources, providing valuable insights for business decision making.',
+                'service6Title': 'Custom Solutions',
+                'service6Text': 'We create tailor-made systems that combine chatbots, RPA and web scraping to offer comprehensive solutions that solve specific challenges for your business.',
+                'privacyTitle': 'Privacy Policy',
+                'privacy1Title': 'Data Protection',
+                'privacy1Text': 'We are committed to protecting the privacy of our customers and users through advanced security protocols and compliance with current data protection regulations.',
+                'privacy2Title': 'Use of Information',
+                'privacy2Text': 'The data provided is used exclusively to provide and improve our services, always guaranteeing the confidentiality and security of the information.',
+                'privacy3Title': 'Cookies and Similar Technologies',
+                'privacy3Text': 'This website uses technical cookies necessary for its operation and analytical cookies to improve the user experience, always with your consent.',
+                'footerCopyright': '© 2025 Mazinbot Technologies. All rights reserved.',
+                'footerSlogan': 'Innovating in automation and intelligent communication',
+                'menuItems': ['Home', 'Services', 'About Us', 'Contact', 'Privacy']
+            }
+        };
+
+        // Language switcher functionality
+        const languageButton = document.getElementById('languageButton');
+        const languageText = document.getElementById('languageText');
+        let currentLanguage = 'es';
+
+        // Function to change language
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            // Mostrar el idioma contrario al actual
+            languageText.textContent = lang === 'es' ? 'EN' : 'ES';
+            
+            // Update all translatable elements
+            for (const [key, value] of Object.entries(translations[lang])) {
+                if (key === 'menuItems') {
+                    // Update menu items
+                    const menuLinks = document.querySelectorAll('.menu a:not(.language-switcher a)');
+                    menuLinks.forEach((link, index) => {
+                        link.textContent = value[index];
+                    });
+                } else {
+                    const elements = document.querySelectorAll(`[id="${key}"]`);
+                    elements.forEach(element => {
+                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                            element.placeholder = value;
+                        } else {
+                            element.textContent = value;
+                        }
+                    });
+                }
+            }
+            
+            // Store preference in localStorage
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Button click event
+        languageButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const newLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            changeLanguage(newLanguage);
+        });
+
+        // Check for saved language preference
+        const savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage && savedLanguage !== 'es') {
+            changeLanguage(savedLanguage);
+        }
+    </script>
+</body>
+</html>
